@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/users")
@@ -47,7 +45,6 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable int userId) {
-        log.info("DELETE / users / {}", userId);
         userService.deleteUser(userId);
     }
 }
