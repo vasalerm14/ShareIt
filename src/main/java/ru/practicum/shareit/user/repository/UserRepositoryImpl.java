@@ -21,7 +21,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(int userId) {
-        return users.get(userId);
+        User user = users.get(userId);
+        if (user == null) {
+            throw new EntityNotFoundException("Пользователь не найден");
+        }
+        return user;
     }
 
     @Override

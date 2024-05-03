@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item.repository;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -14,11 +14,15 @@ import java.util.ArrayList;
 public class ItemRepositoryImpl implements ItemRepository {
     private static int generatorId = 0;
     private final Map<Integer, Item> items = new HashMap<>();
-    private final Map<Integer, List<Item>> userItemIndex = new LinkedHashMap<>();
+    private final Map<Integer, List<Item>> userItemIndex = new HashMap<>();
 
     @Override
     public Item getItemById(int itemId) {
-        return items.get(itemId);
+        Item item = items.get(itemId);
+        if (item == null) {
+            throw new EntityNotFoundException("Объект не найден");
+        }
+        return item;
     }
 
     @Override

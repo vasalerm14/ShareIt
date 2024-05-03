@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,11 +35,14 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> getFilmBySearch(@RequestParam String text) {
+        if (text.isBlank()) {
+            return new ArrayList<>();
+        }
         return itemService.getItemBySearch(text);
     }
 
     @PostMapping
-    public ItemDto saveNewItem(@Validated @RequestBody ItemDto itemDto,
+    public ItemDto saveNewItem(@Valid @RequestBody ItemDto itemDto,
                                @RequestHeader("X-Sharer-User-Id") int userId) {
         return itemService.saveNewItem(itemDto, userId);
     }

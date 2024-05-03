@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.NotUniqueEmailException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -16,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final List<String> emails = new ArrayList<>();
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -28,15 +28,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new EntityNotFoundException("Пользователь не найден");
-        }
-        return UserMapper.toUserDto(user);
+        return UserMapper.toUserDto(userRepository.getUserById(userId));
     }
 
     @Override
     public UserDto saveNewUser(UserDto userDto) {
+
         validateUniqueEmail(userDto);
         User user = userRepository.saveNewUser(UserMapper.toUser(userDto));
         return UserMapper.toUserDto(user);
@@ -45,10 +42,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(int userId, UserDto userDto) {
         User user = userRepository.getUserById(userId);
-
-        if (user == null) {
-            throw new EntityNotFoundException("Пользователь не найден");
-        }
         String name = userDto.getName();
         String email = userDto.getEmail();
         if (name != null && !name.isBlank()) {
@@ -58,21 +51,23 @@ public class UserServiceImpl implements UserService {
             if (!user.getEmail().equals(userDto.getEmail())) {
                 validateUniqueEmail(userDto);
             }
+            emails.remove(user.getEmail());
             user.setEmail(email);
+
         }
         return UserMapper.toUserDto(user);
     }
 
     @Override
     public void deleteUser(int id) {
+        emails.remove(userRepository.getUserById(id).getEmail());
         userRepository.deleteUser(id);
     }
 
     private void validateUniqueEmail(UserDto userDto) {
-        for (User user : userRepository.getAllUsers()) {
-            if (user.getEmail().equals(userDto.getEmail())) {
-                throw new NotUniqueEmailException("Пользователь с таким Email уже существует");
-            }
+        if (emails.contains(userDto.getEmail())) {
+            throw new NotUniqueEmailException("Пользователь с таким Email уже существует");
         }
+        emails.add(userDto.getEmail());
     }
 }
