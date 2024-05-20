@@ -20,6 +20,5 @@ public class BookingDtoIn {
     @NotNull
     private LocalDateTime end;
 
-    @NotNull
     private int itemId;
 }

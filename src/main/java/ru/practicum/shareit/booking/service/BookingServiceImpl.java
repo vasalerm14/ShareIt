@@ -50,6 +50,14 @@ public class BookingServiceImpl implements BookingService {
                 bookingDtoIn.getStart().isBefore(LocalDateTime.now())) {
             throw new WrongDatesException("Дата начала бронирования должна быть раньше даты возврата");
         }
+
+        List<Booking> existingBookings = bookingRepository.findOverlappingBookings(
+                item.getId(), bookingDtoIn.getStart(), bookingDtoIn.getEnd());
+        if (!existingBookings.isEmpty()) {
+            throw new ItemIsNotAvailableException("Бронь уже существует");
+        }
+
+
         Booking booking = new Booking();
         booking.setItem(item);
         booking.setBooker(booker);
@@ -61,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDtoOut approve(int bookingId, Boolean isApproved, int userId) {
         User owner = getUser(userId);
         Booking booking = getById(bookingId);
-        Item item = getItem(booking.getItem().getId());
+        Item item = booking.getItem();
         if (booking.getStatus() != BookingStatus.WAITING) {
             throw new ItemIsNotAvailableException("Вещь уже забронирована");
         }
@@ -73,17 +81,20 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toBookingDtoOut(booking);
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public BookingDtoOut getBookingById(int bookingId, int userId) {
         Booking booking = getById(bookingId);
         User booker = booking.getBooker();
-        User owner = getUser(booking.getItem().getOwner().getId());
+        Item item = booking.getItem();
+        User owner = getUser(item.getOwner().getId());
         if (booker.getId() != userId && owner.getId() != userId) {
-            throw new IllegalVewAndUpdateException("Только автор или владелец может просматривать данное броинрование");
+            throw new IllegalVewAndUpdateException("Только автор или владелец может просматривать данное бронирование");
         }
         return BookingMapper.toBookingDtoOut(booking);
     }
+
 
     @Transactional(readOnly = true)
     @Override
