@@ -71,9 +71,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.id = :itemId " +
-            "AND (:start BETWEEN b.start AND b.end " +
-            "OR :end BETWEEN b.start AND b.end)")
+            "AND (:start <= b.end AND :end >= b.start)")
     List<Booking> findOverlappingBookings(int itemId,
                                           LocalDateTime start,
                                           LocalDateTime end);
+
 }
