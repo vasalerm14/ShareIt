@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping
@@ -39,6 +38,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable int userId, @RequestBody UserDto userDto) {
+
         return userService.updateUser(userId, userDto);
     }
 
