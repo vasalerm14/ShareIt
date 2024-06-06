@@ -19,6 +19,7 @@ public class ItemDtoOut {
     private BookingDtoShort nextBooking;
     private List<CommentDtoOut> comments;
     private UserDtoShort owner;
+    private Integer requestId;
 
     public ItemDtoOut(int id, String name, String description, Boolean available, UserDtoShort owner) {
         this.id = id;
