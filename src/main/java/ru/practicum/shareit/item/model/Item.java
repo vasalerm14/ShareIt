@@ -5,7 +5,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "items")
