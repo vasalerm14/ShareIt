@@ -12,10 +12,8 @@ import javax.validation.constraints.Size;
 public class ItemDtoIn {
     @Size(max = 255)
     private String name;
-
     @Size(max = 1000)
     private String description;
-
     private Boolean available;
 
     private Integer requestId;
