@@ -83,6 +83,7 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(List.of(requestDto))));
     }
+
     @Test
     void getRequestById() throws Exception {
         when(requestService.getRequestById(anyInt(), anyInt())).thenReturn(requestDto);

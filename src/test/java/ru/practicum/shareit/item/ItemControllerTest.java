@@ -64,6 +64,7 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.description", is(itemDtoOut.getDescription()), String.class))
                 .andExpect(jsonPath("$.available", is(itemDtoOut.getAvailable()), Boolean.class));
     }
+
     @Test
     void updateItem() throws Exception {
         when(itemService.updateItem(anyInt(), any(), anyInt())).thenReturn(itemDtoOut);
