@@ -46,7 +46,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class ItemService{
+public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
@@ -55,7 +55,7 @@ public class ItemService{
 
     public ItemDtoOut saveNewItem(ItemDtoIn itemDtoIn, int userId) {
         log.info("Создание новой вещи {}", itemDtoIn.getName());
-        if(itemDtoIn.getName().isBlank() || itemDtoIn.getAvailable() == null || itemDtoIn.getDescription() == null){
+        if (itemDtoIn.getName().isBlank() || itemDtoIn.getAvailable() == null || itemDtoIn.getDescription() == null) {
             throw new BadParamsException("Ошибка в параметрах предмета");
         }
         User owner = getUser(userId);
@@ -198,7 +198,7 @@ public class ItemService{
     }
 
     private User getUser(int userId) {
-       log.info("aaa1 {}", userRepository.findById(userId));
+        log.info("aaa1 {}", userRepository.findById(userId));
         return userRepository.findById(userId).orElseThrow(() ->
                 new EntityNotFoundException(String.format("Объект класса %s не найден", User.class)));
     }
