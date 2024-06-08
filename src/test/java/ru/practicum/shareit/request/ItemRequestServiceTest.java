@@ -55,6 +55,7 @@ class ItemRequestServiceTest {
 
         Assertions.assertEquals(ItemRequestMapper.toItemRequestDtoOut(request), actualRequest);
     }
+
     @Test
     void getRequestsByRequestor_whenUserNotFound_thenThrownException() {
         when((userRepository).findById(3)).thenReturn(Optional.empty());
@@ -76,7 +77,6 @@ class ItemRequestServiceTest {
 
         Assertions.assertEquals(List.of(requestDtoOut), actualRequests);
     }
-
 
 
     @Test
