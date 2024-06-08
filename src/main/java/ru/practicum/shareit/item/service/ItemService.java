@@ -194,7 +194,6 @@ public class ItemService {
     }
 
     private User getUser(int userId) {
-        log.info("aaa1 {}", userRepository.findById(userId));
         return userRepository.findById(userId).orElseThrow(() ->
                 new EntityNotFoundException(String.format("Объект класса %s не найден", User.class)));
     }
