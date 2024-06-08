@@ -30,7 +30,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ItemDtoOut updateItem(@PathVariable int itemId,
-                                 @Valid @RequestBody ItemDtoIn itemDtoIn,
+                                 @RequestBody ItemDtoIn itemDtoIn,
                                  @RequestHeader("X-Sharer-User-Id") int userId) {
         log.info("PATCH / items {} / user {}", itemId, userId);
         return itemService.updateItem(itemId, itemDtoIn, userId);

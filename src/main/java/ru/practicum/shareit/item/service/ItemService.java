@@ -55,9 +55,6 @@ public class ItemService {
 
     public ItemDtoOut saveNewItem(ItemDtoIn itemDtoIn, int userId) {
         log.info("Создание новой вещи {}", itemDtoIn.getName());
-        if (itemDtoIn.getName().isBlank() || itemDtoIn.getAvailable() == null || itemDtoIn.getDescription() == null) {
-            throw new BadParamsException("Ошибка в параметрах предмета");
-        }
         User owner = getUser(userId);
 
         Item item = ItemMapper.toItem(itemDtoIn);

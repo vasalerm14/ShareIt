@@ -70,4 +70,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     Boolean existsByBookerIdAndItemIdAndEndBefore(int bookerId, int itemId, LocalDateTime localDateTime);
 
+    List<Booking> findAllByItemId(int itemId);
+
 }

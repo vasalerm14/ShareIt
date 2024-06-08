@@ -46,6 +46,14 @@ public class BookingService {
                 bookingDtoIn.getStart().isBefore(LocalDateTime.now())) {
             throw new WrongDatesException("Дата начала бронирования должна быть раньше даты возврата");
         }
+
+        List<Booking> existingBookings = bookingRepository.findAllByItemId(item.getId());
+        for (Booking existingBooking : existingBookings) {
+            if (bookingDtoIn.getStart().isBefore(existingBooking.getEnd()) &&
+                    bookingDtoIn.getEnd().isAfter(existingBooking.getStart())) {
+                throw new BookingTimeOverlapException("Бронирование пересекается с существующим");
+            }
+        }
         Booking booking = new Booking();
         booking.setItem(item);
         booking.setBooker(booker);
