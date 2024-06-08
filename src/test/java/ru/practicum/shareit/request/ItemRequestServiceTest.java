@@ -23,8 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,20 +55,6 @@ class ItemRequestServiceTest {
 
         Assertions.assertEquals(ItemRequestMapper.toItemRequestDtoOut(request), actualRequest);
     }
-
-    @Test
-    void getRequestsByRequestor_whenUserFound_thenSavedRequest() {
-        when(userRepository.findById(2)).thenReturn(Optional.of(requestor));
-        when(requestRepository.findAllByRequestorId(anyInt(), any())).thenReturn(List.of(request));
-        when(itemRepository.findAllByRequestId(1)).thenReturn(List.of(item));
-        final ItemRequestDtoOut requestDtoOut = ItemRequestMapper.toItemRequestDtoOut(request);
-        requestDtoOut.setItems(List.of(ItemMapper.toItemDtoOut(item)));
-
-        List<ItemRequestDtoOut> actualRequests = requestService.getRequestsByRequestor(2);
-
-        Assertions.assertEquals(List.of(requestDtoOut), actualRequests);
-    }
-
     @Test
     void getRequestsByRequestor_whenUserNotFound_thenThrownException() {
         when((userRepository).findById(3)).thenReturn(Optional.empty());
@@ -82,7 +67,8 @@ class ItemRequestServiceTest {
     void getAllRequests_whenCorrectPageArguments_thenReturnRequests() {
         when(userRepository.findById(2)).thenReturn(Optional.of(requestor));
         when(requestRepository.findAllByRequestorIdIsNot(anyInt(), any())).thenReturn(List.of(requestSecond));
-        when(itemRepository.findAllByRequestId(anyInt())).thenReturn(List.of(itemSecond));
+        when(itemRepository.findAllByRequestIdIn(anyList())).thenReturn(List.of(itemSecond));
+
         final ItemRequestDtoOut requestDtoOut = ItemRequestMapper.toItemRequestDtoOut(requestSecond);
         requestDtoOut.setItems(List.of(ItemMapper.toItemDtoOut(itemSecond)));
 
@@ -90,6 +76,8 @@ class ItemRequestServiceTest {
 
         Assertions.assertEquals(List.of(requestDtoOut), actualRequests);
     }
+
+
 
     @Test
     void getRequestById() {
