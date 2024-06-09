@@ -99,4 +99,24 @@ class UserServiceTest {
         verify(userRepository, times(1))
                 .deleteById(1);
     }
+
+    @Test
+    void updateUser_whenUserFound_thenUpdateFields() {
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        UserDto updatedUserDto = new UserDto(id, "UpdatedUser", "updateduser@mail.ru");
+
+        UserDto updatedUser = userService.updateUser(id, updatedUserDto);
+
+        Assertions.assertEquals(updatedUserDto, updatedUser);
+        Assertions.assertEquals("UpdatedUser", user.getName());
+        Assertions.assertEquals("updateduser@mail.ru", user.getEmail());
+    }
+
+    @Test
+    void updateUser_whenUserNotFound_thenThrowException() {
+        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> userService.updateUser(2, userDto));
+    }
 }
