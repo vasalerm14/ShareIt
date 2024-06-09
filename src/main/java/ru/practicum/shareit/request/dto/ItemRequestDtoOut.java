@@ -1,5 +1,7 @@
 package ru.practicum.shareit.request.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
@@ -16,7 +18,12 @@ public class ItemRequestDtoOut {
     private LocalDateTime created;
     private List<ItemDtoOut> items;
 
-    public ItemRequestDtoOut(int id, String description, int requestorId, LocalDateTime created) {
+    @JsonCreator
+    public ItemRequestDtoOut(
+            @JsonProperty("id") int id,
+            @JsonProperty("description") String description,
+            @JsonProperty("requestorId") int requestorId,
+            @JsonProperty("created") LocalDateTime created) {
         this.id = id;
         this.description = description;
         this.requestorId = requestorId;
