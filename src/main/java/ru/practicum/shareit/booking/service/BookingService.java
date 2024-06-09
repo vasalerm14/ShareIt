@@ -51,7 +51,7 @@ public class BookingService {
         for (Booking existingBooking : existingBookings) {
             if (bookingDtoIn.getStart().isBefore(existingBooking.getEnd()) &&
                     bookingDtoIn.getEnd().isAfter(existingBooking.getStart())) {
-                throw new BookingTimeOverlapException("Бронирование пересекается с существующим");
+                throw new ItemIsNotAvailableException("Бронь уже существует");
             }
         }
         Booking booking = new Booking();
