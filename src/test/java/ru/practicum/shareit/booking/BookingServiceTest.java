@@ -57,7 +57,6 @@ class BookingServiceTest {
             LocalDateTime.of(2023, 7, 30, 12, 12, 12), 2);
 
 
-
     @Test
     void saveNewBooking_whenUserNotFound_thenThrownException() {
         when((userRepository).findById(3)).thenReturn(Optional.empty());
@@ -265,4 +264,53 @@ class BookingServiceTest {
 
         Assertions.assertEquals(List.of(BookingMapper.toBookingDtoOut(booking)), actualBookings);
     }
+
+    @Test
+    void approve_whenBookingAlreadyRejected_thenThrownException() {
+        booking.setStatus(BookingStatus.REJECTED);
+        when(bookingRepository.findById(1)).thenReturn(Optional.of(booking));
+
+        Assertions.assertThrows(ItemIsNotAvailableException.class, () ->
+                bookingService.approve(1, true, 1));
+    }
+
+    @Test
+    void getBookingById_whenBookingNotFound_thenThrownException() {
+        when(bookingRepository.findById(1)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+                bookingService.getBookingById(1, 1));
+    }
+
+    @Test
+    void getAllByBooker_whenStateUnsupported_thenThrownException() {
+        Assertions.assertThrows(UnsupportedStatusException.class, () ->
+                bookingService.getAllByBooker(0, 10, "UNKNOWN", 2));
+    }
+
+    @Test
+    void getAllByOwner_whenStateUnsupported_thenThrownException() {
+        Assertions.assertThrows(UnsupportedStatusException.class, () ->
+                bookingService.getAllByOwner(0, 10, "UNKNOWN", 1));
+    }
+
+    @Test
+    void saveNewBooking_whenStartDateBeforeNow_thenThrownException() {
+        BookingDtoIn pastBookingDtoIn = new BookingDtoIn(
+                LocalDateTime.of(2022, 7, 1, 12, 12, 12),
+                LocalDateTime.of(2023, 7, 30, 12, 12, 12), 1);
+
+        when(userRepository.findById(2)).thenReturn(Optional.of(booker));
+        when(itemRepository.findById(1)).thenReturn(Optional.of(item));
+
+        Assertions.assertThrows(WrongDatesException.class, () ->
+                bookingService.saveNewBooking(pastBookingDtoIn, 2));
+    }
+
+
+
+
+
+
+
 }

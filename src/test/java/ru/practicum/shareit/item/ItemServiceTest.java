@@ -186,4 +186,23 @@ class ItemServiceTest {
         Assertions.assertThrows(NotBookerException.class, () ->
                 itemService.saveNewComment(2, new CommentDtoIn("abc"), id));
     }
+
+    @Test
+    void updateItem_whenItemNotFound_thenNotUpdatedItem() {
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(itemRepository.findById(2)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> itemService.updateItem(2, itemDtoIn, id));
+    }
+
+    @Test
+    void getItemsByOwner_whenUserNotFound_thenExceptionThrown() {
+        when(userRepository.findById(2)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> itemService.getItemsByOwner(0, 10, 2));
+        verify(itemRepository, never()).findAllByOwnerId(anyInt(), any());
+    }
+
+
+
 }
