@@ -14,10 +14,4 @@ public class ErrorHandler {
     public ErrorResponse validateException(RuntimeException e) {
         return new ErrorResponse(e.getMessage());
     }
-
-    @ExceptionHandler({NotUniqueEmailException.class})
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleConflictException(RuntimeException e) {
-        return new ErrorResponse(e.getMessage());
-    }
 }

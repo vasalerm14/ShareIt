@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.booking.dto.BookingDtoShort;
@@ -19,8 +21,15 @@ public class ItemDtoOut {
     private BookingDtoShort nextBooking;
     private List<CommentDtoOut> comments;
     private UserDtoShort owner;
+    private Integer requestId;
 
-    public ItemDtoOut(int id, String name, String description, Boolean available, UserDtoShort owner) {
+    @JsonCreator
+    public ItemDtoOut(
+            @JsonProperty("id") int id,
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("available") Boolean available,
+            @JsonProperty("owner") UserDtoShort owner) {
         this.id = id;
         this.name = name;
         this.description = description;

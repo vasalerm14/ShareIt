@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,48 +13,48 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
-    List<Booking> findAllByBookerId(int bookerId, Sort start);
+    List<Booking> findAllByBookerId(int bookerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.booker.id = ?1 " +
             "AND current_timestamp BETWEEN b.start AND b.end")
-    List<Booking> findAllByBookerIdAndStateCurrent(int bookerId, Sort start);
+    List<Booking> findAllByBookerIdAndStateCurrent(int bookerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.booker.id = ?1 " +
             "AND current_timestamp > b.end")
-    List<Booking> findAllByBookerIdAndStatePast(int brokerId, Sort start);
+    List<Booking> findAllByBookerIdAndStatePast(int brokerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.booker.id = ?1 " +
             "AND current_timestamp < b.start")
-    List<Booking> findAllByBookerIdAndStateFuture(int bookerId, Sort start);
+    List<Booking> findAllByBookerIdAndStateFuture(int bookerId, Pageable pageable);
 
-    List<Booking> findAllByBookerIdAndStatus(int bookerId, BookingStatus bookingStatus, Sort start);
+    List<Booking> findAllByBookerIdAndStatus(int bookerId, BookingStatus bookingStatus, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.owner.id = ?1")
-    List<Booking> findAllByOwnerId(int ownerId, Sort start);
+    List<Booking> findAllByOwnerId(int ownerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.owner.id = ?1 " +
             "AND current_timestamp BETWEEN b.start AND b.end")
-    List<Booking> findAllByOwnerIdAndStateCurrent(int ownerId, Sort start);
+    List<Booking> findAllByOwnerIdAndStateCurrent(int ownerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.owner.id = ?1 " +
             "AND current_timestamp > b.end")
-    List<Booking> findAllByOwnerIdAndStatePast(int ownerId, Sort start);
+    List<Booking> findAllByOwnerIdAndStatePast(int ownerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.owner.id = ?1 " +
             "AND current_timestamp < b.start")
-    List<Booking> findAllByOwnerIdAndStateFuture(int ownerId, Sort start);
+    List<Booking> findAllByOwnerIdAndStateFuture(int ownerId, Pageable pageable);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.owner.id = ?1 " +
             "AND b.status = ?2")
-    List<Booking> findAllByOwnerIdAndStatus(int ownerId, BookingStatus bookingStatus, Sort start);
+    List<Booking> findAllByOwnerIdAndStatus(int ownerId, BookingStatus bookingStatus, Pageable pageable);
 
     Optional<Booking> findFirstByItemIdAndStartLessThanEqualAndStatus(int itemId, LocalDateTime localDateTime,
                                                                       BookingStatus bookingStatus, Sort end);
@@ -69,11 +70,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     Boolean existsByBookerIdAndItemIdAndEndBefore(int bookerId, int itemId, LocalDateTime localDateTime);
 
-    @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.id = :itemId " +
-            "AND (:start <= b.end AND :end >= b.start)")
-    List<Booking> findOverlappingBookings(int itemId,
-                                          LocalDateTime start,
-                                          LocalDateTime end);
+    List<Booking> findAllByItemId(int itemId);
 
 }
