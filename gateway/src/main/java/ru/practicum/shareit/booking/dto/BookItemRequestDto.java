@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingDtoRequest {
+public class BookItemRequestDto {
 
-	private long id;
+	private int id;
 
 	@FutureOrPresent
 	@NotNull
@@ -23,7 +23,5 @@ public class BookingDtoRequest {
 	@Future
 	@NotNull
 	private LocalDateTime end;
-
-	@NotNull
-	private Long itemId;
+	private int itemId;
 }

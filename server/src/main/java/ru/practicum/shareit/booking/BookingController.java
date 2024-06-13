@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoIn;
 import ru.practicum.shareit.booking.dto.BookingDtoOut;
 import ru.practicum.shareit.booking.service.BookingService;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
@@ -38,8 +36,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDtoOut> getAllByBooker(@RequestParam(defaultValue = "1") @PositiveOrZero Integer from,
-                                              @RequestParam(defaultValue = "10") @Positive Integer size,
+    public List<BookingDtoOut> getAllByBooker(@RequestParam(defaultValue = "1") Integer from,
+                                              @RequestParam(defaultValue = "10") Integer size,
                                               @RequestParam(name = "state", defaultValue = "ALL") String state,
                                               @RequestHeader("X-Sharer-User-Id") int bookerId) {
         log.info("GET / ByBooker {}", bookerId);
@@ -47,8 +45,8 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public List<BookingDtoOut> getAllByOwner(@RequestParam(defaultValue = "1") @PositiveOrZero Integer from,
-                                             @RequestParam(defaultValue = "10") @Positive Integer size,
+    public List<BookingDtoOut> getAllByOwner(@RequestParam(defaultValue = "1") Integer from,
+                                             @RequestParam(defaultValue = "10") Integer size,
                                              @RequestParam(name = "state", defaultValue = "ALL") String state,
                                              @RequestHeader("X-Sharer-User-Id") int ownerId) {
         log.info("GET / ByOwner / {}", ownerId);

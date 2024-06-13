@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -7,11 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+
+import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingState;
 import ru.practicum.shareit.client.BaseClient;
-
-import java.util.Map;
 
 @Service
 public class BookingClient extends BaseClient {
@@ -27,16 +28,16 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> saveNewBooking(BookingDtoRequest bookingDto, long userId) {
+    public ResponseEntity<Object> saveNewBooking(BookItemRequestDto bookingDto, int userId) {
         return post("", userId, bookingDto);
     }
 
-    public ResponseEntity<Object> approve(long bookingId, Boolean isApproved, long userId) {
+    public ResponseEntity<Object> approve(int bookingId, Boolean isApproved, long userId) {
         Map<String, Object> parameters = Map.of("approved", isApproved);
         return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
     }
 
-    public ResponseEntity<Object> getBookingById(long bookingId, long userId) {
+    public ResponseEntity<Object> getBookingById(int bookingId, int userId) {
         return get("/" + bookingId, userId);
     }
 
@@ -57,6 +58,4 @@ public class BookingClient extends BaseClient {
         );
         return get("/owner?state={state}&from={from}&size={size}", userId, parameters);
     }
-
-
 }
