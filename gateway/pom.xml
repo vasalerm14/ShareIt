@@ -13,6 +13,10 @@
 
     <name>ShareIt Gateway</name>
 
+    <properties>
+        <java.version>18</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
