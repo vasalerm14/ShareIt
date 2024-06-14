@@ -15,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/requests")
-public class ItemRequestGController {
+public class ItemRequestController {
     private final ItemRequestClient requestClient;
 
     @PostMapping

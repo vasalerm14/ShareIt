@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/items")
-public class ItemGController {
+public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping

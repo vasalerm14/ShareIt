@@ -29,10 +29,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -102,6 +99,8 @@ public class ItemService {
         log.info("Получение вещи по владельцу {}", userId);
         getUser(userId);
         List<Item> items = itemRepository.findAllByOwnerId(userId, PageRequest.of(from / size, size));
+        items.sort(Comparator.comparing(Item::getId));
+
         return addBookingsAndCommentsForList(items);
     }
 
